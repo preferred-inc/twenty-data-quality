@@ -41,3 +41,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 *.d.ts
+# ...but hand-written ambient declarations are source, not build output.
+!src/types/*.d.ts
