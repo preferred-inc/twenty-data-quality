@@ -1,2 +1,2 @@
-/** twenty-ui のスタイルシートを副作用インポートするための宣言 */
+/** Lets components.tsx side-effect import twenty-ui's stylesheet. */
 declare module '*.css';
