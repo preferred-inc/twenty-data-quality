@@ -19,48 +19,11 @@ import { BORDER, COLOR, FONT, RADIUS, space, type ThemeColor } from 'src/ui/them
 import {
   formatPercent,
   gradeOf,
-  scoreObject,
   scoreWorkspace,
-  type FieldMeta,
   type Grade,
-  type ObjectMeta,
   type ObjectScore,
 } from 'src/lib/quality';
-
-/** Objects that describe the workspace itself rather than its data. */
-const NON_DATA_OBJECTS = new Set(['dashboard', 'workflow']);
-
-const RECORD_PAGE_SIZE = 200;
-
-const METADATA_QUERY = `{
-  objects(paging: { first: 200 }) {
-    edges {
-      node {
-        nameSingular
-        namePlural
-        labelSingular
-        labelPlural
-        isSystem
-        isActive
-        fields(paging: { first: 200 }) {
-          edges { node { name label type isSystem isActive isNullable relation { type } } }
-        }
-      }
-    }
-  }
-}`;
-
-type MetadataResponse = {
-  data?: {
-    objects?: {
-      edges: {
-        node: Omit<ObjectMeta, 'fields'> & {
-          fields: { edges: { node: FieldMeta }[] };
-        };
-      }[];
-    };
-  };
-};
+import { RECORD_PAGE_SIZE, scanWorkspace } from 'src/lib/workspace';
 
 const GRADE_COLOR: Record<Grade, ThemeColor> = {
   good: 'green',
@@ -104,48 +67,9 @@ const DataQualityPage = () => {
 
   useEffect(() => {
     const client = new RestApiClient();
-
-    const load = async () => {
-      const metadata = await client.request<MetadataResponse>('POST', '/metadata', {
-        body: { query: METADATA_QUERY },
-      });
-
-      const objects: ObjectMeta[] = (metadata.data?.objects?.edges ?? [])
-        .map(({ node }) => ({ ...node, fields: node.fields.edges.map((edge) => edge.node) }))
-        .filter(
-          (object) =>
-            object.isActive !== false &&
-            object.isSystem !== true &&
-            !NON_DATA_OBJECTS.has(object.nameSingular),
-        );
-
-      const results = await Promise.all(
-        objects.map(async (object) => {
-          try {
-            const response = await client.get<Record<string, Record<string, unknown>[]>>(
-              `/rest/${object.namePlural}`,
-              { query: { limit: RECORD_PAGE_SIZE } },
-            );
-            // The REST envelope nests records under `data.<namePlural>`.
-            const envelope = (response as { data?: Record<string, unknown> }).data ?? {};
-            const records = (envelope[object.namePlural] ?? []) as Record<string, unknown>[];
-            return scoreObject(object, records);
-          } catch {
-            // An object the role cannot read should not break the whole page.
-            return null;
-          }
-        }),
-      );
-
-      setScores(
-        results
-          .filter((result): result is ObjectScore => result !== null)
-          .filter((result) => result.recordCount > 0)
-          .sort((a, b) => a.ratio - b.ratio),
-      );
-    };
-
-    load().catch((e) => setError(e instanceof Error ? e.message : String(e)));
+    scanWorkspace(client)
+      .then(setScores)
+      .catch((e) => setError(e instanceof Error ? e.message : String(e)));
   }, []);
 
   const overall = useMemo(() => (scores === null ? 0 : scoreWorkspace(scores)), [scores]);
