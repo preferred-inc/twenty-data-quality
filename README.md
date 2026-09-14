@@ -1,5 +1,8 @@
 # Data Quality — a Twenty app
 
+[![CI](https://github.com/preferred-inc/twenty-data-quality/actions/workflows/ci.yml/badge.svg)](https://github.com/preferred-inc/twenty-data-quality/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Scores how completely the records in your [Twenty](https://twenty.com) workspace are filled in, worst first.
 
 **Zero configuration.** It reads the Metadata API at runtime, so every object and field in *your*
@@ -51,13 +54,21 @@ The app appears in the navigation as **Data Quality**.
 ## Development
 
 ```bash
-yarn test:unit     # unit tests for the scoring rules
+yarn test:unit     # scoring rules — no server needed
+yarn test          # integration tests — needs a Twenty instance
 yarn typecheck
 yarn lint
 ```
 
-The scoring rules live in [`src/lib/quality.ts`](src/lib/quality.ts) as pure functions with no I/O,
-so they are covered by tests without a running Twenty instance.
+The code is split so that both halves are testable:
+
+- [`src/lib/quality.ts`](src/lib/quality.ts) — the scoring rules, as pure functions with no I/O.
+  Covered by unit tests without a running Twenty instance.
+- [`src/lib/workspace.ts`](src/lib/workspace.ts) — everything that talks to Twenty. Covered by
+  integration tests that run against a real instance in CI, so an upstream schema change fails
+  the build rather than a user's browser.
+
+For integration tests locally, start a server first with `yarn twenty docker:start`.
 
 ## Sampling
 
