@@ -16,18 +16,19 @@ import {
 } from 'src/ui/theme';
 
 /**
- * front component 用の共通レイアウト。
+ * Shared layout pieces for the front component.
  *
- * 既製のパーツ（Tag・Card・Loader など）は twenty-ui のものをそのまま使い、
- * 本体にない組み方（ウィジェットの外枠、テーブルの行、集計カード）だけをここで組む。
- * 色・寸法は必ずテーマ変数（src/ui/theme）を経由し、直値を書かない。
+ * Ready-made parts (Tag, Card, Loader …) come straight from twenty-ui; only
+ * the arrangements it does not ship — the widget frame, table rows, stat cards
+ * — are built here. Colours and sizes always go through the theme tokens in
+ * src/ui/theme, never as literals.
  */
 
 export { Tag };
 
 /**
- * front component の `<style>` はビルド時のシムで `document.head` に注入され、
- * 内容ハッシュで重複排除されるため、何度描画してもスタイルは 1 回しか入らない。
+ * A front component's `<style>` is injected into `document.head` by the build
+ * shim and de-duplicated by content hash, so re-rendering never stacks it up.
  */
 export const UiStyles = () => (
   <style>{`
@@ -50,11 +51,11 @@ export const UiStyles = () => (
 
 type WidgetFrameProps = {
   children: ReactNode;
-  /** ガント等、横スクロールが要る画面だけ true にする */
+  /** Only for views that genuinely need horizontal scrolling. */
   scrollX?: boolean;
 };
 
-/** ウィジェット領域いっぱいに広がる外枠。本体と同じ書体・文字色を適用する。 */
+/** Fills the widget area and adopts the host's typeface and text colour. */
 export const WidgetFrame = ({ children, scrollX = false }: WidgetFrameProps) => (
   <div
     className="tw-scroll"
@@ -126,12 +127,12 @@ export const WidgetHeader = ({ title, subtitle, right }: WidgetHeaderProps) => (
 export type Column = {
   key: string;
   label: string;
-  /** 固定幅。省略すると残り幅を分け合う */
+  /** Fixed width. Omit to share the remaining space. */
   width?: string;
   align?: 'left' | 'right';
 };
 
-/** 本体のレコードテーブルに寄せた行レイアウト（ヘッダー 24px / 行 32px）。 */
+/** Row layout matched to the host's record table (24px header, 32px rows). */
 export const TableHeader = ({ columns }: { columns: Column[] }) => (
   <div
     style={{
@@ -226,7 +227,7 @@ export const StateMessage = ({ variant, children }: StateMessageProps) => (
   </div>
 );
 
-/** 集計値を並べるサマリーカード。twenty-ui の Card を土台にする。 */
+/** Summary card for a single figure, built on twenty-ui's Card. */
 export const StatCard = ({
   label,
   value,
@@ -260,7 +261,7 @@ export const StatCard = ({
   </Card>
 );
 
-/** セクション見出し。件数を添えられる。 */
+/** Section heading, optionally with a count. */
 export const SectionTitle = ({
   children,
   count,

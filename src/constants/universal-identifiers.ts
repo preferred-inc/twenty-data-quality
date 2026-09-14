@@ -1,4 +1,5 @@
-/** アプリ全体で使う universalIdentifier。一度発行したら変更しないこと（変更すると別エンティティとして再作成される）。 */
+/** Stable ids for every entity this app declares. Never change one once it has shipped —
+ *  a changed identifier is treated as a different entity and gets recreated. */
 
 export const APP_DISPLAY_NAME = 'Data Quality';
 export const APP_DESCRIPTION =

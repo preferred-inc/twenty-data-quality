@@ -1,15 +1,16 @@
 import type { ThemeColor } from 'twenty-ui/theme';
 
 /**
- * Twenty 本体のデザイントークン。
+ * Twenty's own design tokens.
  *
- * front component は iframe でも shadow DOM でもなく、ホストと同じ DOM に描画される。
- * そのため twenty-ui が `<html class="light|dark">` に定義している CSS 変数（`--t-*`）が
- * そのまま解決される。色やサイズを直書きせずここを経由することで、本体と同じ見た目になり、
- * ライト／ダークの切り替えにも自動で追従する。
+ * A front component renders into the host's DOM — not an iframe, not a shadow
+ * root — so the CSS variables twenty-ui defines on `<html class="light|dark">`
+ * (`--t-*`) resolve as-is. Going through these tokens instead of hard-coding
+ * colours and sizes is what makes the app look native and follow the host's
+ * light/dark switch for free.
  *
- * 既製のパーツ（Tag・Button・Card など）は twenty-ui のコンポーネントをそのまま使う。
- * ここのトークンは、既製品にない配置・寸法（ガントの帯、テーブルの行）を組むときに使う。
+ * Ready-made parts (Tag, Button, Card …) come from twenty-ui directly. These
+ * tokens are for the layouts twenty-ui does not ship — score bars, table rows.
  */
 
 export type { ThemeColor };
@@ -66,14 +67,14 @@ export const RADIUS = {
   pill: 'var(--t-border-radius-pill)',
 } as const;
 
-/** Twenty の spacing スケール（1 = 4px） */
+/** Twenty's spacing scale (1 = 4px). */
 export const space = (multiplier: number) => `var(--t-spacing-${multiplier})`;
 
-/** twenty-ui の Tag と同じ配色を、既製品でない要素（ガントの帯など）に流用するためのもの */
+/** Reuses twenty-ui's Tag palette on elements it does not ship, such as score bars. */
 export const tagBackground = (color: ThemeColor) => `var(--t-tag-background-${color})`;
 export const tagText = (color: ThemeColor) => `var(--t-tag-text-${color})`;
 
-/** 本体のレコードテーブルの実測値 */
+/** Measured from the host's own record table. */
 export const SIZE = {
   rowHeight: '32px',
   headerHeight: '24px',
