@@ -11,12 +11,21 @@ workspace is picked up automatically — including custom ones. There is no list
 **Read-only.** The role it ships with grants read access and nothing else. It never writes, deletes,
 or changes settings.
 
+![Overall completeness and a bar per object, worst first](docs/overview.jpg)
+
 ## What it shows
 
 - **Overall completeness** — weighted by how many values each object actually contributes, so an
   object with 3 records cannot swing the score as hard as one with 500
 - **Per object** — a bar per object, sorted worst first, expandable into a per-field breakdown
 - **Worst fields across the workspace** — the ten fields most likely to be worth a bulk fix
+
+Expanding an object breaks it down field by field, worst first:
+
+![Per-field breakdown for one object](docs/per-field.jpg)
+
+*(Screenshots are from a Japanese production workspace — object and field labels come from your
+workspace, so the app speaks whatever language your Twenty does.)*
 
 ## What it does *not* score, and why
 
