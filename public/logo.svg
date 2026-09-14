@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Data Quality">
+  <rect width="64" height="64" rx="14" fill="#141414"/>
+  <!-- Three completeness bars, worst first — the shape the app is named for. -->
+  <rect x="12" y="18" width="14" height="6" rx="3" fill="#B42318"/>
+  <rect x="12" y="18" width="40" height="6" rx="3" fill="#B42318" fill-opacity="0.22"/>
+  <rect x="12" y="29" width="26" height="6" rx="3" fill="#B54708"/>
+  <rect x="12" y="29" width="40" height="6" rx="3" fill="#B54708" fill-opacity="0.22"/>
+  <rect x="12" y="40" width="38" height="6" rx="3" fill="#067647"/>
+  <rect x="12" y="40" width="40" height="6" rx="3" fill="#067647" fill-opacity="0.22"/>
+</svg>

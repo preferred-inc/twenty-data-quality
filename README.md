@@ -11,7 +11,7 @@ workspace is picked up automatically — including custom ones. There is no list
 **Read-only.** The role it ships with grants read access and nothing else. It never writes, deletes,
 or changes settings.
 
-![Overall completeness and a bar per object, worst first](docs/overview.jpg)
+![Overall completeness and a bar per object, worst first](public/overview.jpg)
 
 ## What it shows
 
@@ -22,7 +22,7 @@ or changes settings.
 
 Expanding an object breaks it down field by field, worst first:
 
-![Per-field breakdown for one object](docs/per-field.jpg)
+![Per-field breakdown for one object](public/per-field.jpg)
 
 *(Screenshots are from a Japanese production workspace — object and field labels come from your
 workspace, so the app speaks whatever language your Twenty does.)*
