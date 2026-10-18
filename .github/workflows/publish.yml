@@ -26,7 +26,8 @@ permissions:
 
 jobs:
   publish:
-    runs-on: ubicloud-standard-2
+    # npm の provenance（trusted publishing）は GitHub ホストランナーでしか発行できないので、ここだけ Ubicloud にしない
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
